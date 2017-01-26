@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MyTVC.h
 //  Entrega4Chat
 //
 //  Created by dedam on 24/1/17.
@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CellUserChat.h"
 
-@interface ViewController : UIViewController
-
+@interface MyTVC : UITableViewController
 
 @end
-
