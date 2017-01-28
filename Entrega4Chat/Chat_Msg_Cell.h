@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface Chat_Msg_Cell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *txtMsg;
+@property (strong, nonatomic) IBOutlet UIView *contentCell;
+
 
 @end

@@ -14,5 +14,8 @@
 @property(strong,nonatomic)NSString *userChat;
 @property(strong,nonatomic)UIImage *imageChat;
 @property (strong, nonatomic) IBOutlet UIImageView *userImg;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+
+
 
 @end
