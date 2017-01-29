@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChatRoomVC : UIViewController
+@interface ChatRoomVC : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+{
+    UIImagePickerController *m_imgPicker;
+    UIActionSheet *m_ActionSheet;
+}
 @property (strong, nonatomic) IBOutlet UILabel *tituloChat;
 @property (strong, nonatomic) IBOutlet UIButton *btnBack;
 @property(strong,nonatomic)NSString *userChat;

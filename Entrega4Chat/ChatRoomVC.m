@@ -196,10 +196,71 @@
     [m_aMessages addObject:m2];
     
     [_tableView reloadData];
-    
+}
 
+- (IBAction)btnFoto:(id)sender {
+    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"IMATGES" message:@"Tria una imatge" delegate:self cancelButtonTitle:@"CANCEL" otherButtonTitles:@"CAMARA",@"GALERIA", nil];
+    [alert show];
     
 }
+//ALERTA
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex==1){
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+        {
+            if (m_imgPicker == nil)
+            {
+                m_imgPicker = [[UIImagePickerController alloc] init];
+            }
+            m_imgPicker.allowsEditing = YES;
+            m_imgPicker.delegate = self;
+            m_imgPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:m_imgPicker animated:YES completion:nil];
+        }
+        else
+        {
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"La cámara no está disponible" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+    }
+    
+    if(buttonIndex==2){ //seleccion de imagen GALERIA
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]){
+            if(m_imgPicker==nil)
+                m_imgPicker=[[UIImagePickerController alloc]init];
+            
+            m_imgPicker.allowsEditing=YES;
+            m_imgPicker.delegate=self;
+            m_imgPicker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:m_imgPicker animated:YES completion:nil];
+        }
+        else{
+            UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"No puedes seleccionar imagen de Archivo" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+    }
+}
+
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo
+{
+    ChatData *m3 = [[ChatData alloc]init];
+    m3.m_iVersion=1;
+    m3.m_iID=3;
+    m3.m_bIsMine=YES;
+    m3.m_eChatDataType=1;
+    m3.m_sMessage=@"mensaje pal mon";
+    m3.m_Date=[[NSDate alloc]init]; //fecha actual
+    m3.m_Image=img;
+    [m_aMessages addObject:m3];
+    
+    [_tableView reloadData];
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 
 
 #pragma mark - Iniciar Datos
@@ -323,7 +384,6 @@
 }
 */
 
-- (IBAction)btnFoto:(id)sender {
-}
+
 
 @end
