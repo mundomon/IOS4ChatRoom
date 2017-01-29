@@ -16,6 +16,7 @@
 @interface ChatRoomVC ()
 {
     NSMutableArray* m_aMessages;
+    NSMutableArray* replyMessages;
 }
 
 @end
@@ -36,6 +37,7 @@
     _tableView.estimatedRowHeight=20;
     
     [self iniciarMensajes];
+    [self iniciarReplyMessages];
     
 }
 
@@ -169,6 +171,37 @@
     return cell;
 }
 
+
+#pragma mark - Botones
+
+- (IBAction)btnEnviar:(id)sender{
+    ChatData *m1 = [[ChatData alloc]init];
+    m1.m_iVersion=1;
+    m1.m_iID=1;
+    m1.m_bIsMine=YES;
+    m1.m_eChatDataType=0;
+    m1.m_sMessage=@"mensaje de test";
+    m1.m_Date=[[NSDate alloc]init]; //fecha actual
+    m1.m_Image=nil;
+    [m_aMessages addObject:m1];
+    
+    ChatData *m2=[[ChatData alloc]init];
+    m2.m_iVersion=1;
+    m2.m_iID=1;
+    m2.m_bIsMine=NO;
+    m2.m_eChatDataType=0;
+    m2.m_sMessage=@"mensaje de test";
+    m2.m_Date=[[NSDate alloc]init]; //fecha actual
+    m2.m_Image=nil;
+    [m_aMessages addObject:m2];
+    
+    [_tableView reloadData];
+    
+
+    
+}
+
+
 #pragma mark - Iniciar Datos
 
 -(void)iniciarMensajes{
@@ -178,8 +211,9 @@
     m1.m_bIsMine=YES;
     m1.m_eChatDataType=0;
     m1.m_sMessage=@"mensaje del mon 1";
-    //m1.m_Date=[NSDate init]; //fecha actual
+    m1.m_Date=[[NSDate alloc]init]; //fecha actual
     m1.m_Image=nil;
+    //[m1 createData:1 iID:1 bIsMine:YES eChatDataType:0 sMessage:@"Mensaje del mon 1" mdate:[[NSDate alloc]init] image:nil];
     
     ChatData *m2 = [[ChatData alloc]init];
     m2.m_iVersion=1;
@@ -187,7 +221,7 @@
     m2.m_bIsMine=NO;
     m2.m_eChatDataType=0;
     m2.m_sMessage=@"mensaje del mon 2 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame ho non";
-    //m2.m_Date=[NSDate init]; //fecha actual
+    m2.m_Date=[[NSDate alloc]init]; //fecha actual
     m2.m_Image=nil;
     
     ChatData *m3 = [[ChatData alloc]init];
@@ -196,7 +230,7 @@
     m3.m_bIsMine=YES;
     m3.m_eChatDataType=1;
     m3.m_sMessage=@"mensaje pal mon";
-    //m3.m_Date=[NSDate init]; //fecha actual
+    m3.m_Date=[[NSDate alloc]init]; //fecha actual
     m3.m_Image=[UIImage imageNamed:@"avatar.png" ];
     
     ChatData *m4 = [[ChatData alloc]init];
@@ -205,7 +239,7 @@
     m4.m_bIsMine=NO;
     m4.m_eChatDataType=1;
     m4.m_sMessage=@"mensaje pal mon";
-    //m4.m_Date=[NSDate init]; //fecha actual
+    m4.m_Date=[[NSDate alloc]init]; //fecha actual
     m4.m_Image=[UIImage imageNamed:@"company.png" ];
     
     ChatData *m5 = [[ChatData alloc]init];
@@ -214,7 +248,7 @@
     m5.m_bIsMine=YES;
     m5.m_eChatDataType=0;
     m5.m_sMessage=@"mensaje del mon 3 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame ho no";
-    //m1.m_Date=[NSDate init]; //fecha actual
+    m5.m_Date=[[NSDate alloc]init]; //fecha actual
     m5.m_Image=nil;
     
     m_aMessages = [[NSMutableArray alloc]init];
@@ -236,6 +270,49 @@
     [m_aMessages addObject:m4];
     
 }
+
+-(void)iniciarReplyMessages{
+    ChatData *m1 = [[ChatData alloc]init];
+    m1.m_iVersion=1;
+    m1.m_iID=1;
+    m1.m_bIsMine=NO;
+    m1.m_eChatDataType=0;
+    m1.m_sMessage=@"Aha...";
+    m1.m_Date=[[NSDate alloc]init]; //fecha actual
+    m1.m_Image=nil;
+    [replyMessages addObject:m1];
+    
+    ChatData *m2=[[ChatData alloc]init];
+    m2.m_iVersion=1;
+    m2.m_iID=2;
+    m2.m_bIsMine=NO;
+    m2.m_eChatDataType=0;
+    m2.m_sMessage=@"Yo a ti también...";
+    m2.m_Date=[[NSDate alloc]init]; //fecha actual
+    m2.m_Image=nil;
+    [replyMessages addObject:m2];
+    
+    ChatData *m3=[[ChatData alloc]init];
+    m3.m_iVersion=1;
+    m3.m_iID=3;
+    m3.m_bIsMine=NO;
+    m3.m_eChatDataType=0;
+    m3.m_sMessage=@"Claro, claro, lo que tu digas";
+    m3.m_Date=[[NSDate alloc]init]; //fecha actual
+    m3.m_Image=nil;
+    [replyMessages addObject:m3];
+    
+    ChatData *m4=[[ChatData alloc]init];
+    m4.m_iVersion=1;
+    m4.m_iID=4;
+    m4.m_bIsMine=NO;
+    m4.m_eChatDataType=0;
+    m4.m_sMessage=@"Lo siento mucho, la culpa es mia, no volvera a ocurrir. La próxima vez será diferente.";
+    m4.m_Date=[[NSDate alloc]init]; //fecha actual
+    m4.m_Image=nil;
+    [replyMessages addObject:m4];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -245,5 +322,8 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (IBAction)btnFoto:(id)sender {
+}
 
 @end

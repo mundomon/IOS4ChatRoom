@@ -17,5 +17,9 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 
+- (IBAction)btnFoto:(id)sender;
+- (IBAction)btnEnviar:(id)sender;
+
+
 
 @end

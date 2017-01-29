@@ -33,7 +33,6 @@ typedef enum{
 
 
 //---Functions:
-//...
-
+-(ChatData*)createData:(int)iVersionParam iID:(int)iIDParam bIsMine:(BOOL)bIsMineParam eChatDataType:(ChatDataType)eChatDataTypeParam sMessage:(NSString*)sMessageParam mdate:(NSDate*)dateParam image:(UIImage*)imageParam;
 
 @end

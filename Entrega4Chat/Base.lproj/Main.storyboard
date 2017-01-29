@@ -151,6 +151,24 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZBi-fW-Vw0">
+                                                    <rect key="frame" x="23" y="37" width="73" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tm0-Dq-q5e">
+                                                            <rect key="frame" x="0.0" y="4" width="42" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_delivered.png" translatesAutoresizingMaskIntoConstraints="NO" id="lfS-qw-LFa">
+                                                            <rect key="frame" x="50" y="4" width="23" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="grw-CX-gNb" secondAttribute="trailing" constant="17" id="2Cz-fZ-edL"/>
@@ -282,12 +300,18 @@
                                         <rect key="frame" x="8" y="10" width="45" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <state key="normal" backgroundImage="woowos_chat_options.png"/>
+                                        <connections>
+                                            <action selector="btnFoto:" destination="pAh-PV-zBd" eventType="touchUpInside" id="Mc6-iZ-owm"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xLd-mT-LLq">
                                         <rect key="frame" x="302" y="15" width="65" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Enviar" backgroundImage="woowos_pink_box.9.png"/>
+                                        <connections>
+                                            <action selector="btnEnviar:" destination="pAh-PV-zBd" eventType="touchUpInside" id="Dky-eT-Dcb"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -317,6 +341,7 @@
         <image name="globo_verd_b.png" width="237" height="45"/>
         <image name="globo_verd_c.png" width="229" height="15"/>
         <image name="globo_verd_d.png" width="229" height="9"/>
+        <image name="tick_delivered.png" width="74" height="51"/>
         <image name="woowos_back_arrow.png" width="17" height="20"/>
         <image name="woowos_bg_chat.png" width="128" height="128"/>
         <image name="woowos_chat_options.png" width="68" height="66"/>
