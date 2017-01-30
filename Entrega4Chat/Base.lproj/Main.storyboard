@@ -320,6 +320,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="ViewHeader" destination="hG5-un-CWe" id="QjX-gJ-2IN"/>
                         <outlet property="btnBack" destination="FdV-1z-XdN" id="F11-a8-IZE"/>
                         <outlet property="tableView" destination="jmU-kA-rFq" id="85M-2O-Bzu"/>
                         <outlet property="textField" destination="BG1-Oa-zHL" id="EJQ-iy-gDb"/>

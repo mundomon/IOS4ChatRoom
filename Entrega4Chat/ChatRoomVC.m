@@ -13,10 +13,12 @@
 #import "Chat_OtherImage_Cell.h"
 #import "Chat_MyImage_Cell.h"
 
+
 @interface ChatRoomVC ()
 {
     NSMutableArray* m_aMessages;
     NSMutableArray* replyMessages;
+    UITapGestureRecognizer *tapPress;
 }
 
 @end
@@ -41,6 +43,18 @@
 
     // Keyboard events
     [self registerForKeyBoardNotifications];
+    
+    //TAP gesture recognizer
+    tapPress=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTaps:)];
+    [tapPress setNumberOfTouchesRequired:1];
+    [tapPress setNumberOfTapsRequired:1];
+    [self.tableView addGestureRecognizer:tapPress];
+}
+
+-(void)handleTaps:(UITapGestureRecognizer*)paramSender{
+    if([_textField isFirstResponder]){
+        [self.view endEditing:YES];
+    }
 }
 
 #pragma mark - Keyboard events
@@ -217,32 +231,34 @@
     [self.view endEditing:YES];
     
     NSString* texto=_textField.text;
-    _textField.text=@"";
-    
-    ChatData *m1 = [[ChatData alloc]init];
-    m1.m_iVersion=1;
-    m1.m_iID=1;
-    m1.m_bIsMine=YES;
-    m1.m_eChatDataType=0;
-    m1.m_sMessage=texto;
-    m1.m_Date=[[NSDate alloc]init]; //fecha actual
-    m1.m_Image=nil;
-    [m_aMessages addObject:m1];
-    
-    ChatData *m2=[[ChatData alloc]init];
-    m2.m_iVersion=1;
-    m2.m_iID=1;
-    m2.m_bIsMine=NO;
-    m2.m_eChatDataType=0;
-    m2.m_sMessage=texto;
-    m2.m_Date=[[NSDate alloc]init]; //fecha actual
-    m2.m_Image=nil;
-    [m_aMessages addObject:m2];
-    
-    [_tableView reloadData];
+    if(![texto isEqual:@""]){
+        _textField.text=@"";
+        
+        ChatData *m1 = [[ChatData alloc]init];
+        m1.m_iVersion=1;
+        m1.m_iID=1;
+        m1.m_bIsMine=YES;
+        m1.m_eChatDataType=0;
+        m1.m_sMessage=texto;
+        m1.m_Date=[[NSDate alloc]init]; //fecha actual
+        m1.m_Image=nil;
+        [m_aMessages addObject:m1];
+        
+        ChatData *m2=[[ChatData alloc]init];
+        m2.m_iVersion=1;
+        m2.m_iID=1;
+        m2.m_bIsMine=NO;
+        m2.m_eChatDataType=0;
+        m2.m_sMessage=texto;
+        m2.m_Date=[[NSDate alloc]init]; //fecha actual
+        m2.m_Image=nil;
+        [m_aMessages addObject:m2];
+        
+        [_tableView reloadData];
+    }
 }
 
-- (IBAction)btnFoto:(id)sender {    
+- (IBAction)btnFoto:(id)sender {
     UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"IMATGES" message:@"Tria una imatge" delegate:self cancelButtonTitle:@"CANCEL" otherButtonTitles:@"CAMARA",@"GALERIA", nil];
     [alert show];
     
