@@ -34,32 +34,71 @@
     //_tituloChat.numberOfLines=0;
     //[_tituloChat sizeToFit];
     _tableView.rowHeight=UITableViewAutomaticDimension;
-    _tableView.estimatedRowHeight=20;
+    _tableView.estimatedRowHeight=70;
     
     [self iniciarMensajes];
     [self iniciarReplyMessages];
-    
+
+    // Keyboard events
+    [self registerForKeyBoardNotifications];
 }
 
+#pragma mark - Keyboard events
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)registerForKeyBoardNotifications{
+    // Keyboard events
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        
+        CGRect frame = _viewToolBar.frame;
+        frame.origin.y -= kbSize.height;
+        _viewToolBar.frame = frame;
+        
+        frame = _tableView.frame;
+        frame.size.height -= kbSize.height;
+        _tableView.frame = frame;
+        //[self goToLastMessage];
+    }];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    [_textField becomeFirstResponder];
+    [UIView animateWithDuration:0.2f animations:^{
+        
+        CGRect frame = _viewToolBar.frame;
+        NSLog(@"Toolbar: width-height:%f-%f (%f,%f)",frame.size.width,frame.size.height,frame.origin.x,frame.origin.y);
+
+        frame.origin.y += kbSize.height;
+        _viewToolBar.frame = frame;
+        NSLog(@"Toolbar2: width-height:%f-%f (%f,%f)",frame.size.width,frame.size.height,frame.origin.x,frame.origin.y);
+        frame = _tableView.frame;
+        frame.size.height += kbSize.height;
+        _tableView.frame = frame;
+        NSLog(@"tableView: width-height:%f-%f (%f,%f)",_tableView.frame.size.height,_tableView.frame.size.width,_tableView.frame.origin.x,_tableView.frame.origin.y);
+        
+    }];
 }
 
 #pragma mark - Funciones obligatorias del TableView
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.0f;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     // Return the number of sections.
     return 1;
 }
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     // Return the number of rows in the section.
     return m_aMessages.count;
 }
@@ -111,7 +150,7 @@
         cell = [[Chat_Msg_Cell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellType];
     }
     cell.txtMsg.text = chatData.m_sMessage;
-    cell.txtMsg.numberOfLines=0;
+    cell.txtMsg.numberOfLines=0; //para que el label se ajuste a la altura del texto
     //[cell.txtMsg sizeToFit];
     //[cell.contentCell sizeToFit];
     
@@ -175,12 +214,17 @@
 #pragma mark - Botones
 
 - (IBAction)btnEnviar:(id)sender{
+    [self.view endEditing:YES];
+    
+    NSString* texto=_textField.text;
+    _textField.text=@"";
+    
     ChatData *m1 = [[ChatData alloc]init];
     m1.m_iVersion=1;
     m1.m_iID=1;
     m1.m_bIsMine=YES;
     m1.m_eChatDataType=0;
-    m1.m_sMessage=@"mensaje de test";
+    m1.m_sMessage=texto;
     m1.m_Date=[[NSDate alloc]init]; //fecha actual
     m1.m_Image=nil;
     [m_aMessages addObject:m1];
@@ -190,7 +234,7 @@
     m2.m_iID=1;
     m2.m_bIsMine=NO;
     m2.m_eChatDataType=0;
-    m2.m_sMessage=@"mensaje de test";
+    m2.m_sMessage=texto;
     m2.m_Date=[[NSDate alloc]init]; //fecha actual
     m2.m_Image=nil;
     [m_aMessages addObject:m2];
@@ -198,7 +242,7 @@
     [_tableView reloadData];
 }
 
-- (IBAction)btnFoto:(id)sender {
+- (IBAction)btnFoto:(id)sender {    
     UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"IMATGES" message:@"Tria una imatge" delegate:self cancelButtonTitle:@"CANCEL" otherButtonTitles:@"CAMARA",@"GALERIA", nil];
     [alert show];
     
@@ -206,10 +250,8 @@
 //ALERTA
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex==1){
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-        {
-            if (m_imgPicker == nil)
-            {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+            if (m_imgPicker == nil){
                 m_imgPicker = [[UIImagePickerController alloc] init];
             }
             m_imgPicker.allowsEditing = YES;
@@ -217,8 +259,7 @@
             m_imgPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
             [self presentViewController:m_imgPicker animated:YES completion:nil];
         }
-        else
-        {
+        else{
             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"La cámara no está disponible" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
         }
@@ -241,11 +282,9 @@
     }
 }
 
-
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo
-{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo{
     ChatData *m3 = [[ChatData alloc]init];
     m3.m_iVersion=1;
     m3.m_iID=3;
@@ -384,6 +423,10 @@
 }
 */
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 
 @end

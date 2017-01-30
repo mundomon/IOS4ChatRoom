@@ -131,19 +131,19 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_verd_a.png" translatesAutoresizingMaskIntoConstraints="NO" id="X3b-yF-tan">
                                                     <rect key="frame" x="90" y="4" width="262" height="11"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_verd_b.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rtc-O8-7Y5">
                                                     <rect key="frame" x="90" y="15" width="272" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_verd_c.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nuu-Jx-O3P">
-                                                    <rect key="frame" x="90" y="37" width="262" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
+                                                    <rect key="frame" x="90" y="37" width="262" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_verd_d.png" translatesAutoresizingMaskIntoConstraints="NO" id="R2a-6u-qI7">
-                                                    <rect key="frame" x="90" y="55" width="262" height="11"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="90" y="52" width="262" height="11"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grw-CX-gNb">
                                                     <rect key="frame" x="93" y="17" width="257" height="34"/>
@@ -192,19 +192,19 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_blanc_a.png" translatesAutoresizingMaskIntoConstraints="NO" id="fhi-Wh-Wnc">
                                                     <rect key="frame" x="14" y="8" width="262" height="11"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_blanc_b.png" translatesAutoresizingMaskIntoConstraints="NO" id="6mv-fv-Cpn">
                                                     <rect key="frame" x="4" y="19" width="272" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_blanc_c.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zd0-wG-r8i">
                                                     <rect key="frame" x="14" y="41" width="262" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globo_blanc_d.png" translatesAutoresizingMaskIntoConstraints="NO" id="8CM-LC-HMH">
-                                                    <rect key="frame" x="14" y="56" width="262" height="11"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="14" y="58" width="262" height="11"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeY-9n-gH4">
                                                     <rect key="frame" x="17" y="21" width="257" height="34"/>
@@ -322,8 +322,10 @@
                     <connections>
                         <outlet property="btnBack" destination="FdV-1z-XdN" id="F11-a8-IZE"/>
                         <outlet property="tableView" destination="jmU-kA-rFq" id="85M-2O-Bzu"/>
+                        <outlet property="textField" destination="BG1-Oa-zHL" id="EJQ-iy-gDb"/>
                         <outlet property="tituloChat" destination="Tjg-3y-gDj" id="OB2-LE-s7t"/>
                         <outlet property="userImg" destination="rUY-1B-mbk" id="6Mo-D4-TLJ"/>
+                        <outlet property="viewToolBar" destination="qlC-Sj-Yyi" id="xyO-Ke-mXw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sB9-4G-4qn" userLabel="First Responder" sceneMemberID="firstResponder"/>

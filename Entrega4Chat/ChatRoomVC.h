@@ -19,6 +19,9 @@
 @property(strong,nonatomic)UIImage *imageChat;
 @property (strong, nonatomic) IBOutlet UIImageView *userImg;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *viewToolBar;
+@property (strong, nonatomic) IBOutlet UITextField *textField;
+
 
 
 - (IBAction)btnFoto:(id)sender;
