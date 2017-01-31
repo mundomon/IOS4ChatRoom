@@ -19,6 +19,13 @@
     NSMutableArray* m_aMessages;
     NSMutableArray* replyMessages;
     UITapGestureRecognizer *tapPress;
+    NSString *stringDate;
+    NSString *stringHour;
+    NSDateFormatter *dateFormatter;
+    NSDateFormatter *hourFormatter;
+    NSDateFormatter *stringToDateFormat;
+    NSMutableArray* list;
+    NSMutableArray *secciones;
 }
 
 @end
@@ -40,6 +47,14 @@
     
     [self iniciarMensajes];
     [self iniciarReplyMessages];
+    list=[[NSMutableArray alloc]init];
+    secciones=[[NSMutableArray alloc]init];
+    
+    dateFormatter=[[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"dd-MM-YYYY"];
+    hourFormatter=[[NSDateFormatter alloc]init];
+    [hourFormatter setDateFormat:@"HH:mm"];
+
 
     // Keyboard events
     [self registerForKeyBoardNotifications];
@@ -49,6 +64,49 @@
     [tapPress setNumberOfTouchesRequired:1];
     [tapPress setNumberOfTapsRequired:1];
     [self.tableView addGestureRecognizer:tapPress];
+    
+    // Initializing sections.
+    
+    ChatData *m=[[ChatData alloc]init];
+    
+    m=[m_aMessages objectAtIndex:0];
+    NSString *fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
+    [list addObject:fechaSeccion];
+    int j=0;
+    for(int i=0;i<m_aMessages.count;i++){
+        
+        m=[m_aMessages objectAtIndex:i];
+        if([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]]){
+            NSMutableArray *rowForSection=[[NSMutableArray alloc]init];
+            
+            NSMutableArray *kk3=[[NSMutableArray alloc]init];
+            kk3=rowForSection;
+            NSLog(@"Mirar kk3");
+            
+            while([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]] &&
+                  i<m_aMessages.count){
+                [rowForSection addObject:[m_aMessages objectAtIndex:i]];
+                i++;
+                if(i<m_aMessages.count) m=[m_aMessages objectAtIndex:i];
+            }
+            [secciones addObject:rowForSection];
+            NSMutableArray *kk2=[[NSMutableArray alloc]init];
+            kk3=[secciones objectAtIndex:j];
+            
+            NSLog(@"Mirar kk3");
+            if(i<m_aMessages.count){ //sale del while pq fecha diferente, es decir nueva seccion
+                fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
+                [list addObject:fechaSeccion];
+                i--;
+                j++;
+            }
+        }
+                
+    }
+    NSMutableArray *kk3=[[NSMutableArray alloc]init];
+    kk3=[secciones objectAtIndex:0];
+    NSLog(@"Mirar kk3");
+
 }
 
 -(void)handleTaps:(UITapGestureRecognizer*)paramSender{
@@ -90,36 +148,57 @@
     [UIView animateWithDuration:0.2f animations:^{
         
         CGRect frame = _viewToolBar.frame;
-        NSLog(@"Toolbar: width-height:%f-%f (%f,%f)",frame.size.width,frame.size.height,frame.origin.x,frame.origin.y);
-
         frame.origin.y += kbSize.height;
         _viewToolBar.frame = frame;
-        NSLog(@"Toolbar2: width-height:%f-%f (%f,%f)",frame.size.width,frame.size.height,frame.origin.x,frame.origin.y);
+        
         frame = _tableView.frame;
         frame.size.height += kbSize.height;
         _tableView.frame = frame;
-        NSLog(@"tableView: width-height:%f-%f (%f,%f)",_tableView.frame.size.height,_tableView.frame.size.width,_tableView.frame.origin.x,_tableView.frame.origin.y);
-        
     }];
 }
 
 #pragma mark - Funciones obligatorias del TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0.0f;
+    return 28.0f;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     // Return the number of sections.
-    return 1;
+    NSLog(@"numero secciones: %d",(int)secciones.count);
+    return secciones.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     // Return the number of rows in the section.
-    return m_aMessages.count;
+    NSMutableArray* kk=[secciones objectAtIndex:section];
+    NSLog(@"seccion %ld rows: %d",(long)section,(int)kk.count);
+    return kk.count;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
+    
+    
+    /* Create custom view to display section header... */
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 18)];
+    [label setFont:[UIFont boldSystemFontOfSize:12]];
+    NSString *string =[list objectAtIndex:section];
+    
+    /* Section header is in 0th index... */
+    [label setText:string];
+    [view addSubview:label];
+    [view setBackgroundColor:
+     [UIColor colorWithRed:166/255.0 green:177/255.0 blue:186/255.0 alpha:1.0]]; //your background color...
+    return view;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatData* chatData = m_aMessages[indexPath.row];
+    NSMutableArray *kk= [secciones objectAtIndex:indexPath.section];
+    ChatData* chatData = [kk objectAtIndex:indexPath.row];
+    NSLog(@"verChatData");
+    
     switch (chatData.m_eChatDataType) {
         case ChatData_Message:
         {
@@ -152,9 +231,15 @@
 
 - (UITableViewCell *)tableView_MyMessage:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ChatData* chatData = m_aMessages[indexPath.row];
+    NSMutableArray *kk= [secciones objectAtIndex:indexPath.section];
+    ChatData* chatData = [kk objectAtIndex:indexPath.row];
     NSString *CellType=@"Chat_Msg_Cell";
     
+    //Gestion Fecha, secciones label
+    stringDate=[dateFormatter stringFromDate:chatData.m_Date];
+    stringHour=[hourFormatter stringFromDate:chatData.m_Date];
+
+    NSLog(@"fecha: %@ %@",stringHour,stringDate);
     
     Chat_Msg_Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellType forIndexPath:indexPath];
     
@@ -167,15 +252,20 @@
     cell.txtMsg.numberOfLines=0; //para que el label se ajuste a la altura del texto
     //[cell.txtMsg sizeToFit];
     //[cell.contentCell sizeToFit];
-    
-    
+    cell.labelDate.text = stringHour;
+    NSLog(@"fecha: %@",cell.labelDate.text);
     return cell;
 }
 
 - (UITableViewCell *)tableView_OtherMessage:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ChatData* chatData = m_aMessages[indexPath.row];
+    NSMutableArray *kk= [secciones objectAtIndex:indexPath.section];
+    ChatData* chatData = [kk objectAtIndex:indexPath.row];
     NSString *CellType=@"Chat_MsgOthers_Cell";
+    
+    //Gestion Fecha, secciones label
+    stringDate=[dateFormatter stringFromDate:chatData.m_Date];
+    stringHour=[hourFormatter stringFromDate:chatData.m_Date];
     
     Chat_MsgOthers_Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellType forIndexPath:indexPath];
     
@@ -186,14 +276,20 @@
     }
     cell.txtMsg.text=chatData.m_sMessage;
     cell.txtMsg.numberOfLines=0;
+    cell.labelDate.text = stringHour;
     
     return cell;
 }
 
 - (UITableViewCell *)tableView_MyImage:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ChatData* chatData = m_aMessages[indexPath.row];
+    NSMutableArray *kk= [secciones objectAtIndex:indexPath.section];
+    ChatData* chatData = [kk objectAtIndex:indexPath.row];
     NSString *CellType=@"Chat_MyImage_Cell";
+    
+    //Gestion Fecha, secciones label
+    stringDate=[dateFormatter stringFromDate:chatData.m_Date];
+    stringHour=[hourFormatter stringFromDate:chatData.m_Date];
     
     Chat_MyImage_Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellType forIndexPath:indexPath];
     
@@ -203,14 +299,22 @@
         cell = [[Chat_MyImage_Cell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellType];
     }
     cell.imgMsg.image=chatData.m_Image;
+    cell.labelDate.text = stringHour;
+
     
     return cell;
 }
 
 - (UITableViewCell *)tableView_OtherImage:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ChatData* chatData = m_aMessages[indexPath.row];
+    NSMutableArray *kk= [secciones objectAtIndex:indexPath.section];
+    ChatData* chatData = [kk objectAtIndex:indexPath.row];
     NSString *CellType=@"Chat_OtherImage_Cell";
+
+    //Gestion Fecha, secciones label
+    stringDate=[dateFormatter stringFromDate:chatData.m_Date];
+    stringHour=[hourFormatter stringFromDate:chatData.m_Date];
+
     
     Chat_OtherImage_Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellType forIndexPath:indexPath];
     
@@ -220,6 +324,7 @@
         cell = [[Chat_OtherImage_Cell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellType];
     }
     cell.imgMsg.image=chatData.m_Image;
+    cell.labelDate.text = stringHour;
     
     return cell;
 }
@@ -321,13 +426,16 @@
 #pragma mark - Iniciar Datos
 
 -(void)iniciarMensajes{
+    stringToDateFormat=[[NSDateFormatter alloc]init];
+    [stringToDateFormat setDateFormat:@"HH:mm dd-MM-yyyy"];
+   
     ChatData *m1 = [[ChatData alloc]init];
     m1.m_iVersion=1;
     m1.m_iID=1;
     m1.m_bIsMine=YES;
     m1.m_eChatDataType=0;
     m1.m_sMessage=@"mensaje del mon 1";
-    m1.m_Date=[[NSDate alloc]init]; //fecha actual
+    m1.m_Date=[stringToDateFormat dateFromString:@"10:30 01-01-2017"];
     m1.m_Image=nil;
     //[m1 createData:1 iID:1 bIsMine:YES eChatDataType:0 sMessage:@"Mensaje del mon 1" mdate:[[NSDate alloc]init] image:nil];
     
@@ -336,8 +444,8 @@
     m2.m_iID=2;
     m2.m_bIsMine=NO;
     m2.m_eChatDataType=0;
-    m2.m_sMessage=@"mensaje del mon 2 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame ho non";
-    m2.m_Date=[[NSDate alloc]init]; //fecha actual
+    m2.m_sMessage=@"mensaje del mon 2 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame o no";
+    m2.m_Date=[stringToDateFormat dateFromString:@"10:40 01-01-2017"]; //fecha actual
     m2.m_Image=nil;
     
     ChatData *m3 = [[ChatData alloc]init];
@@ -346,7 +454,7 @@
     m3.m_bIsMine=YES;
     m3.m_eChatDataType=1;
     m3.m_sMessage=@"mensaje pal mon";
-    m3.m_Date=[[NSDate alloc]init]; //fecha actual
+    m3.m_Date=[stringToDateFormat dateFromString:@"11:30 02-01-2017"];
     m3.m_Image=[UIImage imageNamed:@"avatar.png" ];
     
     ChatData *m4 = [[ChatData alloc]init];
@@ -355,7 +463,7 @@
     m4.m_bIsMine=NO;
     m4.m_eChatDataType=1;
     m4.m_sMessage=@"mensaje pal mon";
-    m4.m_Date=[[NSDate alloc]init]; //fecha actual
+    m4.m_Date=[stringToDateFormat dateFromString:@"11:59 02-01-2017"];
     m4.m_Image=[UIImage imageNamed:@"company.png" ];
     
     ChatData *m5 = [[ChatData alloc]init];
@@ -363,27 +471,21 @@
     m5.m_iID=5;
     m5.m_bIsMine=YES;
     m5.m_eChatDataType=0;
-    m5.m_sMessage=@"mensaje del mon 3 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame ho no";
+    m5.m_sMessage=@"mensaje del mon 3 que tiene que ser muy largo y ocupar mas de una linea para poder ver si se alarga el frame o no";
     m5.m_Date=[[NSDate alloc]init]; //fecha actual
     m5.m_Image=nil;
     
     m_aMessages = [[NSMutableArray alloc]init];
     [m_aMessages addObject:m1];
-    [m_aMessages addObject:m2];
-    [m_aMessages addObject:m3];
-    [m_aMessages addObject:m4];
     [m_aMessages addObject:m1];
     [m_aMessages addObject:m2];
-    [m_aMessages addObject:m3];
-    [m_aMessages addObject:m4];
-    [m_aMessages addObject:m1];
     [m_aMessages addObject:m2];
     [m_aMessages addObject:m3];
+    [m_aMessages addObject:m3];
+    [m_aMessages addObject:m4];
     [m_aMessages addObject:m4];
     [m_aMessages addObject:m5];
-    [m_aMessages addObject:m2];
-    [m_aMessages addObject:m3];
-    [m_aMessages addObject:m4];
+    [m_aMessages addObject:m5];
     
 }
 

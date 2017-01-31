@@ -10,5 +10,6 @@
 
 @interface Chat_MsgOthers_Cell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *txtMsg;
+@property (strong, nonatomic) IBOutlet UILabel *labelDate;
 
 @end

@@ -10,6 +10,8 @@
 
 @implementation ChatData
 
+
+
 -(ChatData*)createData:(int)iVersionParam iID:(int)iIDParam bIsMine:(BOOL)bIsMineParam eChatDataType:(ChatDataType)eChatDataTypeParam sMessage:(NSString*)sMessageParam mdate:(NSDate*)dateParam image:(UIImage*)imageParam{
     
     ChatData *m1 = [[ChatData alloc]init];

@@ -18,7 +18,8 @@ typedef enum{
 
 
 @interface ChatData : NSObject
-{}
+{
+}
 
 //---Properties:
 @property (nonatomic, assign) int           m_iVersion;

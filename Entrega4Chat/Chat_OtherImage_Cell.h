@@ -10,5 +10,6 @@
 
 @interface Chat_OtherImage_Cell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *imgMsg;
+@property (strong, nonatomic) IBOutlet UILabel *labelDate;
 
 @end
