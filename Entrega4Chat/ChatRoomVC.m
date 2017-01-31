@@ -17,7 +17,6 @@
 @interface ChatRoomVC ()
 {
     NSMutableArray* m_aMessages;
-    NSMutableArray* replyMessages;
     UITapGestureRecognizer *tapPress;
     NSString *stringDate;
     NSString *stringHour;
@@ -46,7 +45,7 @@
     _tableView.estimatedRowHeight=70;
     
     [self iniciarMensajes];
-    [self iniciarReplyMessages];
+    
     list=[[NSMutableArray alloc]init];
     secciones=[[NSMutableArray alloc]init];
     
@@ -65,48 +64,7 @@
     [tapPress setNumberOfTapsRequired:1];
     [self.tableView addGestureRecognizer:tapPress];
     
-    // Initializing sections.
-    
-    ChatData *m=[[ChatData alloc]init];
-    
-    m=[m_aMessages objectAtIndex:0];
-    NSString *fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
-    [list addObject:fechaSeccion];
-    int j=0;
-    for(int i=0;i<m_aMessages.count;i++){
-        
-        m=[m_aMessages objectAtIndex:i];
-        if([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]]){
-            NSMutableArray *rowForSection=[[NSMutableArray alloc]init];
-            
-            NSMutableArray *kk3=[[NSMutableArray alloc]init];
-            kk3=rowForSection;
-            NSLog(@"Mirar kk3");
-            
-            while([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]] &&
-                  i<m_aMessages.count){
-                [rowForSection addObject:[m_aMessages objectAtIndex:i]];
-                i++;
-                if(i<m_aMessages.count) m=[m_aMessages objectAtIndex:i];
-            }
-            [secciones addObject:rowForSection];
-            NSMutableArray *kk2=[[NSMutableArray alloc]init];
-            kk3=[secciones objectAtIndex:j];
-            
-            NSLog(@"Mirar kk3");
-            if(i<m_aMessages.count){ //sale del while pq fecha diferente, es decir nueva seccion
-                fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
-                [list addObject:fechaSeccion];
-                i--;
-                j++;
-            }
-        }
-                
-    }
-    NSMutableArray *kk3=[[NSMutableArray alloc]init];
-    kk3=[secciones objectAtIndex:0];
-    NSLog(@"Mirar kk3");
-
+    [self iniciarSecciones];
 }
 
 -(void)handleTaps:(UITapGestureRecognizer*)paramSender{
@@ -164,13 +122,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     // Return the number of sections.
-    NSLog(@"numero secciones: %d",(int)secciones.count);
     return secciones.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     // Return the number of rows in the section.
     NSMutableArray* kk=[secciones objectAtIndex:section];
-    NSLog(@"seccion %ld rows: %d",(long)section,(int)kk.count);
     return kk.count;
 }
 
@@ -239,7 +195,6 @@
     stringDate=[dateFormatter stringFromDate:chatData.m_Date];
     stringHour=[hourFormatter stringFromDate:chatData.m_Date];
 
-    NSLog(@"fecha: %@ %@",stringHour,stringDate);
     
     Chat_Msg_Cell *cell = [tableView dequeueReusableCellWithIdentifier:CellType forIndexPath:indexPath];
     
@@ -253,7 +208,7 @@
     //[cell.txtMsg sizeToFit];
     //[cell.contentCell sizeToFit];
     cell.labelDate.text = stringHour;
-    NSLog(@"fecha: %@",cell.labelDate.text);
+    
     return cell;
 }
 
@@ -359,6 +314,7 @@
         m2.m_Image=nil;
         [m_aMessages addObject:m2];
         
+        [self iniciarSecciones];
         [_tableView reloadData];
     }
 }
@@ -416,6 +372,7 @@
     m3.m_Image=img;
     [m_aMessages addObject:m3];
     
+    [self iniciarSecciones];
     [_tableView reloadData];
     
     [self dismissModalViewControllerAnimated:YES];
@@ -489,46 +446,34 @@
     
 }
 
--(void)iniciarReplyMessages{
-    ChatData *m1 = [[ChatData alloc]init];
-    m1.m_iVersion=1;
-    m1.m_iID=1;
-    m1.m_bIsMine=NO;
-    m1.m_eChatDataType=0;
-    m1.m_sMessage=@"Aha...";
-    m1.m_Date=[[NSDate alloc]init]; //fecha actual
-    m1.m_Image=nil;
-    [replyMessages addObject:m1];
+-(void)iniciarSecciones{
+    // Initializing sections.
+    ChatData *m=[[ChatData alloc]init];
     
-    ChatData *m2=[[ChatData alloc]init];
-    m2.m_iVersion=1;
-    m2.m_iID=2;
-    m2.m_bIsMine=NO;
-    m2.m_eChatDataType=0;
-    m2.m_sMessage=@"Yo a ti también...";
-    m2.m_Date=[[NSDate alloc]init]; //fecha actual
-    m2.m_Image=nil;
-    [replyMessages addObject:m2];
+    m=[m_aMessages objectAtIndex:0];
+    NSString *fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
+    [list addObject:fechaSeccion];
     
-    ChatData *m3=[[ChatData alloc]init];
-    m3.m_iVersion=1;
-    m3.m_iID=3;
-    m3.m_bIsMine=NO;
-    m3.m_eChatDataType=0;
-    m3.m_sMessage=@"Claro, claro, lo que tu digas";
-    m3.m_Date=[[NSDate alloc]init]; //fecha actual
-    m3.m_Image=nil;
-    [replyMessages addObject:m3];
-    
-    ChatData *m4=[[ChatData alloc]init];
-    m4.m_iVersion=1;
-    m4.m_iID=4;
-    m4.m_bIsMine=NO;
-    m4.m_eChatDataType=0;
-    m4.m_sMessage=@"Lo siento mucho, la culpa es mia, no volvera a ocurrir. La próxima vez será diferente.";
-    m4.m_Date=[[NSDate alloc]init]; //fecha actual
-    m4.m_Image=nil;
-    [replyMessages addObject:m4];
+    for(int i=0;i<m_aMessages.count;i++){
+        m=[m_aMessages objectAtIndex:i];
+        if([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]]){
+            NSMutableArray *rowForSection=[[NSMutableArray alloc]init];
+            
+            while([fechaSeccion isEqualToString:[dateFormatter stringFromDate:m.m_Date]] &&
+                  i<m_aMessages.count){
+                [rowForSection addObject:[m_aMessages objectAtIndex:i]];
+                i++;
+                if(i<m_aMessages.count) m=[m_aMessages objectAtIndex:i];
+            }
+            [secciones addObject:rowForSection];
+            
+            if(i<m_aMessages.count){ //sale del while pq fecha diferente, es decir nueva seccion
+                fechaSeccion=[dateFormatter stringFromDate:m.m_Date];
+                [list addObject:fechaSeccion];
+                i--;
+            }
+        }
+    }
 }
 
 /*
