@@ -65,6 +65,7 @@
     [self.tableView addGestureRecognizer:tapPress];
     
     [self iniciarSecciones];
+
 }
 
 -(void)handleTaps:(UITapGestureRecognizer*)paramSender{
@@ -95,7 +96,7 @@
         frame = _tableView.frame;
         frame.size.height -= kbSize.height;
         _tableView.frame = frame;
-        //[self goToLastMessage];
+        [self goToLastMessage];
     }];
 }
 
@@ -113,6 +114,14 @@
         frame.size.height += kbSize.height;
         _tableView.frame = frame;
     }];
+}
+
+-(void)goToLastMessage{
+    [_tableView reloadData];
+    NSInteger lastSection=MAX(0,[_tableView numberOfSections]-1);
+    NSInteger lastRow=MAX(0,[_tableView numberOfRowsInSection:lastSection]-1);
+    NSIndexPath *ip=[NSIndexPath indexPathForRow:lastRow inSection:lastSection];
+    [_tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 #pragma mark - Funciones obligatorias del TableView
@@ -316,6 +325,7 @@
         
         [self iniciarSecciones];
         [_tableView reloadData];
+        [self goToLastMessage];
     }
 }
 
@@ -376,6 +386,7 @@
     [_tableView reloadData];
     
     [self dismissModalViewControllerAnimated:YES];
+    [self goToLastMessage];
 }
 
 
